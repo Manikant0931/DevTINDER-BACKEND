@@ -1,0 +1,22 @@
+we have added some notes here.
+we added in package.json file.
+what we added is?
+=> we added a new script to run the application in development mode.
+Your scripts (what they actually mean)
+"scripts": {
+  "dev": "nodemon app.js",
+  "start": "node app.js"
+}
+Think of scripts as shortcuts with meaning.
+🔹 npm run dev — DEVELOPMENT MODE
+npm run dev
+
+Runs:
+nodemon app.js
+
+What this gives you 👇
+Watches your files 👀
+You change code → save → server auto restarts
+No Ctrl+C again and again
+Fast debugging
+Perfect while building & learning
