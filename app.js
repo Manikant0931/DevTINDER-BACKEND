@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 
+//using app.use() method to define routes
 // app.use("/hello", (req, res) => {
 //     res.send("Hello from /hello route");
 // });
@@ -42,10 +43,23 @@ const app = express();
 //     res.send("Hello from the root route");
 // });
 
-// app.listen(7000, () => {
-//     console.log("Server is running on http://localhost:7000");
+// app.listen(9000, () => {
+//     console.log("Server is running.");
 // });
 
+// pushing user using get method
+app.get("/user", (req, res) => {
+res.send({firstName: "Mani", lastName: "Mishra"});
+});
+app.use("/test", (req, res) => {
+    res.send("This is the /test route");
+});
+app.use("/", (req, res) => {
+    res.send("/ route");
+});
+app.listen(11000, () => {
+    console.log("Server is running at http://localhost:11000");
+});
 
 // ******* (:MAIN SYSTEM:) ******* //
 
@@ -94,7 +108,7 @@ const app = express();
 //     res.send(`Category: ${category}, Product ID: ${productId}`);
 // });
 
-// app.listen(7000, () => {
+// app.listen(2000, () => {
 //     console.log("Server is running.");
 // });
 
@@ -145,7 +159,7 @@ const app = express();
 //     res.send("DELETE request to /data");
 // });
 // app.listen(7000, () => {
-//     console.log("Server is running on http://localhost:7000");
+//     console.log("Server is running.");
 // });
 
 
