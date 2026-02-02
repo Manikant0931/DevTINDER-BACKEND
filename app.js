@@ -60,18 +60,18 @@ const app = express();
 // });
 
 //(ii)
-app.use(express.json());
-app.post("/user", (req, res) => {
-    console.log(req.body);
+// app.use(express.json());
+// app.post("/user", (req, res) => {
+//     console.log(req.body);
 
-    res.status(201).json({
-        message: "User created successfully",
-        data: req.body
-    });
-    });
-    app.listen(7000, () => {
-    console.log("Server is running...");
-});
+//     res.status(201).json({
+//         message: "User created successfully",
+//         data: req.body
+//     });
+//     });
+//     app.listen(7000, () => {
+//     console.log("Server is running...");
+// });
 
 // what is happening here?
 // => We are using express.json() middleware to parse the JSON body of the request.
@@ -147,3 +147,7 @@ app.post("/user", (req, res) => {
 // app.listen(7000, () => {
 //     console.log("Server is running on http://localhost:7000");
 // });
+
+
+
+
