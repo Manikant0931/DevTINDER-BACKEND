@@ -20,3 +20,18 @@ You change code → save → server auto restarts
 No Ctrl+C again and again
 Fast debugging
 Perfect while building & learning
+
+
+
+EPISODE 5 NOTES:-
+
+EPISODE 6 NOTES.:-
+-create a free cluster on the MongoDB official website(Mongo atlas)
+i-nstall mongoose library
+-comnect your applictaion to the database "Connection-url"/devTinder
+-call the ConnectDB function and connect to database before the startig the application on the 7777
+--next
+-go models->create schema(a/q to our design)
+-create a userschema and usermodel
+-create post/signup api to add data to database
+-push some documents using API calls from postman.

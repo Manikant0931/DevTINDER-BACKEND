@@ -266,13 +266,55 @@
 // -------------EPISODE 6  (Databse, Schema & Models | Mongoose)
 // all contents shifted to src folder..:)
 
-const express=require("express");
+// ---------CONNECTING DATABASE
+// const express=require("express");
+// const connectDB=require("./src/config/database");
+// const app=express();
 
-require('./src/config/database')
+// const connectDB=async()=>{
+//     await mongoose.connect("mongodb+srv://NamasteDev:sYYgIhUzVmHzDX3Q@namastenode.esecg3t.mongodb.net/devTINDER"
+//     );
+// };
 
+// connectDB()
+//     .then(()=>{
+//         console.log("database successfully connected");
+//     app.listen(7777,()=>{
+//   console.log("Server is running on port 7777");
+// });
+// })
+//     .catch((err) => {
+//         console.error("db cannot be connected")
+//     });
 
-const app=express();
+// ---------creating database schema
 
-app.listen(7777,()=>{
-  console.log('Server is running on port 7777');
+const express = require("express")
+const connectDB = require("./src/config/database")
+const User = require("./src/models/users")
+const app = express()
+app.use(express.json())
+
+app.post("/signup", async (req, res)=>{
+    const user = new User({
+      firstName: "Manikant",
+      lastName: "Mishra",
+      email: "viratkoli@gmail.com",
+      password: "secret123",
+      age: 21,
+      gender: "male",
+    });
+    await user.save();
+    res.send("user added successfully.")
 });
+
+connectDB()
+  .then(() => {
+    console.log("database successfully connected")
+    app.listen(7777, () => {
+      console.log("Server is running on port 7777")
+    })
+  })
+  .catch(() => {
+    console.error("db cannot be connected")
+  })

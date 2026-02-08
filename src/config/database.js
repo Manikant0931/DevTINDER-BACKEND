@@ -7,17 +7,10 @@ const mongoose=require("mongoose");
 
 // best way:
 const connectDB=async()=>{
-    await mongoose.connect("mongodb+srv://NamasteDev:sYYgIhUzVmHzDX3Q@namastenode.esecg3t.mongodb.net/"
+    await mongoose.connect("mongodb+srv://NamasteDev:sYYgIhUzVmHzDX3Q@namastenode.esecg3t.mongodb.net/devTINDER"
     );
 };
-connectDB()
-    .then(()=>{
-        console.log("database successfully connected")
-    })
-    .catch((err) => {
-        console.error("db cannot be connected")
-    });
 
-
+module.exports=connectDB;
 
 
