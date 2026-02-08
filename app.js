@@ -1,5 +1,3 @@
-const express = require('express');
-const app = express();
 
 // ----------EOISODE 4(ROUTING AND REQUEST)
 
@@ -265,3 +263,7 @@ const app = express();
 
 // -------------EPISODE 6  (Databse, Schema & Models | Mongoose)
 // all contents shifted to src folder..:)
+
+const express=require("express");
+
+require("./")
