@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 
+// ----------EOISODE 4(ROUTING AND REQUEST)
+
 //using app.use() method to define routes
 // app.use("/hello", (req, res) => {
 //     res.send("Hello from /hello route");
@@ -48,18 +50,16 @@ const app = express();
 // });
 
 // pushing user using get method
-app.get("/user", (req, res) => {
-res.send({firstName: "Mani", lastName: "Mishra"});
-});
-app.use("/test", (req, res) => {
-    res.send("This is the /test route");
-});
-app.use("/", (req, res) => {
-    res.send("/ route");
-});
-app.listen(11000, () => {
-    console.log("Server is running at http://localhost:11000");
-});
+// app.get("/user", (req, res) => {
+// res.send({firstName: "Mani", lastName: "Mishra"});
+// });
+// app.use("/test", (req, res) => {
+//     res.send("This is the /test route");
+// });
+
+// app.listen(11000, () => {
+//     console.log("Server is running at http://localhost:11000");
+// });
 
 // ******* (:MAIN SYSTEM:) ******* //
 
@@ -103,15 +103,14 @@ app.listen(11000, () => {
 //     res.send(`User ID: ${userId}`);
 // });
 // app.get("/product/:category/:id", (req, res) => {
-//     const category = req.params.category;
-//     const productId = req.params.id;
-//     res.send(`Category: ${category}, Product ID: ${productId}`);
+//     const Electronics = req.params.category;
+//     const Mouse = req.params.id;
+//     res.send(`Category: ${Electronics}, Product ID: ${Mouse}`);
 // });
 
 // app.listen(2000, () => {
-//     console.log("Server is running.");
+//     console.log("Server is running at http://localhost:2000.");
 // });
-
 
 
 //3. Query parameters
@@ -142,8 +141,6 @@ app.listen(11000, () => {
 
 
 
-
-
 //.
 // handling different HTTP methods for the same route
 // app.get("/data", (req, res) => {
@@ -159,9 +156,112 @@ app.listen(11000, () => {
 //     res.send("DELETE request to /data");
 // });
 // app.listen(7000, () => {
-//     console.log("Server is running.");
+//     console.log("Server is running at http://localhost:7700.");
+// });
+
+
+// 1.+(plus)
+// app.get('ab/c', (req, res) => {
+//     res.send('Matched route with /ab+c');
+// }
+// );
+
+// // ?
+// app.get('/ab?c', (req, res) => {
+//   res.send('Route matched: /ab?c');
+// });
+
+// // *
+// app.get('/a*cd', (req, res) => {
+//   res.send('Route matched: /a*cd');
+// });
+
+// // /
+// app.get(/a/, (req, res) => {
+//   res.send('Route matched any path containing "a"');
+// });
+
+// app.listen(7700, () => {
+//     console.log("Server is running at http://localhost:7700");
 // });
 
 
 
+//-------------------- EPISODE 5(MIDDLEWARES AND ERROR HANDLERS IN EXPRESS)
+//1.
+// app.get('/example', (req, res, next) => {
+//   console.log('First handler');
+//   next(); // Pass control to the next handler
+// }, (req, res) => {
+//   res.send('Second handler');
+// });
 
+//2.
+// app.get('/skip', (req, res, next) => {
+//   console.log('This handler will be skipped');
+//   next('route'); // Skips to the next matching route handler
+// }, (req, res) => {
+//   res.send('You will not see this response because the handler is skipped');
+// });
+
+// // Next matching route handler
+// app.get('/skip', (req, res) => {
+//   res.send('Skipped to this route handler');
+// });
+// app.listen(7000, () => {
+//   console.log('Server is running at http://localhost:7000');
+// });
+
+
+//3.Example of Middleware Flow
+
+// Middleware 1: Request Logger
+// app.use((req, res, next) => {
+//   console.log(`${req.method} ${req.url}`);
+//   next(); // Pass control to the next middleware
+// });
+
+// Middleware 2: Authorization Check
+//Handle user authentication for all admin routes using middlewares
+// app.use("/admin", (req, res, next) => {
+//     const token = "999";
+//     const isAuthorizedAdmin = token === "999";
+//     if (!isAuthorizedAdmin) {
+//         res.status(401).send("Unauthorized Admin")
+//     } else {
+//         next();
+//     }
+// })
+// app.get("/admin/getAllData", (req, res) => {
+//     res.send("All data Generated")
+// })
+// app.get("/admin/deleteData", (req, res) => {
+//     res.send("Data Deleted")
+// })
+// app.listen(3000, () => console.log('Server is running on port 3000'));
+
+
+///app.use() vs app.all()
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+// 
+
+
+
+
+// -------------EPISODE 6  (Databse, Schema & Models | Mongoose)
+// all contents shifted to src folder..:)
