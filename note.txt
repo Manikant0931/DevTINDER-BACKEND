@@ -35,3 +35,4 @@ i-nstall mongoose library
 -create a userschema and usermodel
 -create post/signup api to add data to database
 -push some documents using API calls from postman.
+--yup->we have initialised the database.
