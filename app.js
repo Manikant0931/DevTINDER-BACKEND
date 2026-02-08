@@ -1,5 +1,7 @@
+// const express=require("express");
+// const app=express()
 
-// ----------EOISODE 4(ROUTING AND REQUEST)
+// ----------EPISODE 4(ROUTING AND REQUEST)
 
 //using app.use() method to define routes
 // app.use("/hello", (req, res) => {
@@ -266,4 +268,11 @@
 
 const express=require("express");
 
-require("./")
+require('./src/config/database')
+
+
+const app=express();
+
+app.listen(7777,()=>{
+  console.log('Server is running on port 7777');
+});
