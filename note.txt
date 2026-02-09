@@ -45,3 +45,8 @@ EPPISODE 7 NOTES:-
 -API-feed API-GET/feed -get all the users from the database.
 --play with the functions=>open mongoose website=>API SECTION=>model=>functions=>try each.
 --EXPOLORE THE DOCUMENTATION.
+-difference b/w the patch and put
+-API-update a user.
+-Explore the mongoose documentation for model methods.
+-what aare the options in Model.findOneandUpdate method,explore more about it.
+-API-update the user with the email id

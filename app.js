@@ -352,6 +352,7 @@ app.use(express.json())
 
 
 // 3.USER BY EMAIL ADDRESS AND AND GET ALL USERS.
+
 // SIGNUP API
 app.post("/signup", async (req, res) => {
   try {
@@ -365,18 +366,18 @@ app.post("/signup", async (req, res) => {
 
 // (i) get users by same emailId
 // Get user by email
-// app.get("/feed", async (req, res) => {
-//   try {
-//     const { email } = req.query
-//     if (!email) {
-//       return res.status(400).send("email query parameter is required")
-//     }
-//     const users = await User.find({ email })
-//     res.send(users)
-//   } catch (err) {
-//     res.status(500).send("Something went wrong")
-//   }
-// })
+app.get("/feed", async (req, res) => {
+  try {
+    const { email } = req.query
+    if (!email) {
+      return res.status(400).send("email query parameter is required")
+    }
+    const users = await User.find({ email })
+    res.send(users)
+  } catch (err) {
+    res.status(500).send("Something went wrong")
+  }
+})
 
 // (i.a)Handling Duplicate Documents with findOne()
     //user API to find the single user by by email
@@ -392,36 +393,6 @@ app.post("/signup", async (req, res) => {
 //     res.status(500).send("Something went wrong")
 //   }
 // })
-
-// Delete API - Removing Documents from Database
-    //delete user API - deleting a user by its id
-// app.delete("/user", async (req, res) => {
-//     const userId = req.body.userId;
-
-//     try {
-//         const users = await User.findByIdAndDelete(userId);
-//         res.send("User deleted Successfully")
-
-//     } catch (err) {
-//         res.status(400).send("Something went wrong")
-//     }
-// })
-
-// Updating Data with PATCH API
-// patch user API - updating the data of user
-// app.patch("/user", async (req, res) => {
-//     const userId = req.body.userId;
-//     const data = req.body;
-
-//     try {
-//         const user = await User.findByIdAndUpdate({ _id: userId }, data, { returnDocument: "before" });
-//         console.log(user)
-//         res.send("User updated successfully")
-
-//     } catch (err) {
-//         res.status(400).send("Something went wrong")
-//     }
-// })
 // (ii) get all users / FEED
 app.get("/feed", async (req, res) => {
   try {
@@ -431,6 +402,43 @@ app.get("/feed", async (req, res) => {
     res.status(500).send("Something went wrong")
   }
 })
+
+// Delete API - Removing Documents from Database
+    //delete user API - deleting a user by its id
+app.delete("/user", async (req, res) => {
+    const userId = req.body.userId;
+
+    try {
+        const user=await User.findByIdAndDelete({_id: userId});
+        // const users = await User.findByIdAndDelete(userId);
+        // both are theway to delete to userAPI
+        res.send("User deleted Successfully")
+
+    } catch (err) {
+        res.status(400).send("Something went wrong")
+    }
+})
+
+// Updating Data with PATCH API
+// patch user API - updating the data of user
+app.patch("/user", async (req, res) => {
+    const userId = req.body.userId;
+    const data = req.body;
+    try {
+        const user = await User.findByIdAndUpdate(userId,  data,{ returnDocument: "before" });
+        console.log("Returned user:", user);
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+        res.send("User updated successfully");
+    } catch (err) {
+        res.status(400).send("Something went wrong");
+    }
+});
+
+
+
+//CONNECTING TO DATABASE
 connectDB()
   .then(() => {
     console.log("Database successfully connected")
@@ -441,3 +449,5 @@ connectDB()
   .catch(() => {
     console.error("DB cannot be connected")
   })
+
+
