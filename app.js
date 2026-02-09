@@ -295,26 +295,149 @@ const User = require("./src/models/users")
 const app = express()
 app.use(express.json())
 
-app.post("/signup", async (req, res)=>{
-    const user = new User({
-      firstName: "Manikant",
-      lastName: "Mishra",
-      email: "viratkoli@gmail.com",
-      password: "secret123",
-      age: 21,
-      gender: "male",
-    });
-    await user.save();
-    res.send("user added successfully.")
-});
+//METHOD-1.manually adding here the data to database
+// app.post("/signup", async (req, res)=>{
+//   // creating an instance of the user model.
+//     const user = new User({
+//       firstName: "Manikant",
+//       lastName: "Mishra",
+//       email: "viratkoli@gmail.com",
+//       password: "secret123",
+//       age: 21,
+//       gender: "male",
+//     });
+//     try{
+//     await user.save();
+//     res.send("user added successfully.");
+// }
+// catch(err){
+//   res.status(400).send("error saving the user:"+ err.message);
+// }
+// });
 
+// connectDB()
+//   .then(() => {
+//     console.log("database successfully connected")
+//     app.listen(7777, () => {
+//       console.log("Server is running on port 7777")
+//     })
+//   })
+//   .catch(() => {
+//     console.error("db cannot be connected")
+//   })
+
+// 2-METHOD:directly editing it through the postman api..
+
+// app.post("/signup", async (req, res)=>{
+//     const user = new User(req.body);
+//     try{
+//     await user.save();
+//     res.send("user added successfully.");
+// }
+// catch(err){
+//   res.status(400).send("error saving the user:"+ err.message);
+// }
+// });
+
+// connectDB()
+//   .then(() => {
+//     console.log("database successfully connected")
+//     app.listen(7777, () => {
+//       console.log("Server is running on port 7777")
+//     })
+//   })
+//   .catch(() => {
+//     console.error("db cannot be connected")
+//   })
+
+
+// 3.USER BY EMAIL ADDRESS AND AND GET ALL USERS.
+// SIGNUP API
+app.post("/signup", async (req, res) => {
+  try {
+    const user = new User(req.body)
+    await user.save()
+    res.status(201).send("User added successfully")
+  } catch (err) {
+    res.status(400).send("Error saving the user: " + err.message)
+  }
+})
+
+// (i) get users by same emailId
+// Get user by email
+// app.get("/feed", async (req, res) => {
+//   try {
+//     const { email } = req.query
+//     if (!email) {
+//       return res.status(400).send("email query parameter is required")
+//     }
+//     const users = await User.find({ email })
+//     res.send(users)
+//   } catch (err) {
+//     res.status(500).send("Something went wrong")
+//   }
+// })
+
+// (i.a)Handling Duplicate Documents with findOne()
+    //user API to find the single user by by email
+// app.get("/user", async (req, res) => {
+//   const userEmail = req.query.emailId
+//   try {
+//     const user = await User.findOne({ emailId: userEmail })
+//     if (!user) {
+//       return res.status(404).send("User not found")
+//     }
+//     res.send(user)
+//   } catch (err) {
+//     res.status(500).send("Something went wrong")
+//   }
+// })
+
+// Delete API - Removing Documents from Database
+    //delete user API - deleting a user by its id
+// app.delete("/user", async (req, res) => {
+//     const userId = req.body.userId;
+
+//     try {
+//         const users = await User.findByIdAndDelete(userId);
+//         res.send("User deleted Successfully")
+
+//     } catch (err) {
+//         res.status(400).send("Something went wrong")
+//     }
+// })
+
+// Updating Data with PATCH API
+// patch user API - updating the data of user
+// app.patch("/user", async (req, res) => {
+//     const userId = req.body.userId;
+//     const data = req.body;
+
+//     try {
+//         const user = await User.findByIdAndUpdate({ _id: userId }, data, { returnDocument: "before" });
+//         console.log(user)
+//         res.send("User updated successfully")
+
+//     } catch (err) {
+//         res.status(400).send("Something went wrong")
+//     }
+// })
+// (ii) get all users / FEED
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await User.find({})
+    res.send(users)
+  } catch (err) {
+    res.status(500).send("Something went wrong")
+  }
+})
 connectDB()
   .then(() => {
-    console.log("database successfully connected")
+    console.log("Database successfully connected")
     app.listen(7777, () => {
       console.log("Server is running on port 7777")
     })
   })
   .catch(() => {
-    console.error("db cannot be connected")
+    console.error("DB cannot be connected")
   })

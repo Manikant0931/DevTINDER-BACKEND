@@ -27,7 +27,7 @@ EPISODE 5 NOTES:-
 
 EPISODE 6 NOTES.:-
 -create a free cluster on the MongoDB official website(Mongo atlas)
-i-nstall mongoose library
+--i-nstall mongoose library
 -comnect your applictaion to the database "Connection-url"/devTinder
 -call the ConnectDB function and connect to database before the startig the application on the 7777
 --next
@@ -36,3 +36,12 @@ i-nstall mongoose library
 -create post/signup api to add data to database
 -push some documents using API calls from postman.
 --yup->we have initialised the database.
+
+EPPISODE 7 NOTES:-
+-difference between JS object and JSON
+-add the express.json middleware to the app.
+-make your signup api dynamic to receive the data from the user.
+-API-get user my email
+-API-feed API-GET/feed -get all the users from the database.
+--play with the functions=>open mongoose website=>API SECTION=>model=>functions=>try each.
+--EXPOLORE THE DOCUMENTATION.
