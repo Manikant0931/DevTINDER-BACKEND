@@ -50,3 +50,12 @@ EPPISODE 7 NOTES:-
 -Explore the mongoose documentation for model methods.
 -what aare the options in Model.findOneandUpdate method,explore more about it.
 -API-update the user with the email id
+
+
+EPISODE 8 NOTES:
+-Open mongoose website=>go to the guides option=>click schema and play with it.
+-add required,unique,lowercase,min,minLength,trim
+-add default
+-create a custom vaalidate function for gender
+-improve the DB schema-put all appropiate validations on the each field in the schema.
+-add time stamps to the schema.
