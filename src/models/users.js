@@ -25,11 +25,10 @@ const userSchema = new mongoose.Schema(
       match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"],
       validate(value){
         if(!validator.isEmail(value)){
-            throw new Error("Invalid email address");
+            throw new Error("Invalid email address: "+value);
         }
       },
     },
-
     password: {
       type: String,
       required: [true, "Password is required"],
@@ -59,9 +58,13 @@ const userSchema = new mongoose.Schema(
 
     photoURL: {
       type: String,
-      trim: true
+      trim: true,
+    validate(value){
+        if(!validator.isURL(value)){
+            throw new Error("Invalid photo URL: " + value);
+        }
+      },
     },
-
     skills: {
       type: [String]
     },

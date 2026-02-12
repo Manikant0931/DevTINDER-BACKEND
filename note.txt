@@ -63,3 +63,5 @@ EPISODE 8 NOTES:
 -add API validation for the each field.
 -DATA santization-what is it? why do we need it?-add api validation for each field.
 -surf the NPM library(i.e.,NPM validators) for the more details.
+-Install the validator library and add some validation in the user schema using the validator library.
+-Explore the validator library for more validation functions and add them to the user schema.
