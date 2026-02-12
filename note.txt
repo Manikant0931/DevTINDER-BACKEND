@@ -55,7 +55,11 @@ EPPISODE 7 NOTES:-
 EPISODE 8 NOTES:
 -Open mongoose website=>go to the guides option=>click schema and play with it.
 -add required,unique,lowercase,min,minLength,trim
--add default
--create a custom vaalidate function for gender
+-add default.
+-create a custom validate function for gender.
 -improve the DB schema-put all appropiate validations on the each field in the schema.
 -add time stamps to the schema.
+-add API level validation for the user update API.(on patch request and signup post api)
+-add API validation for the each field.
+-DATA santization-what is it? why do we need it?-add api validation for each field.
+-surf the NPM library(i.e.,NPM validators) for the more details.

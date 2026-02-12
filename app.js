@@ -141,7 +141,7 @@
 
 
 
-//.
+
 // handling different HTTP methods for the same route
 // app.get("/data", (req, res) => {
 //     res.send("GET request to /data");
@@ -166,17 +166,17 @@
 // }
 // );
 
-// // ?
+// ?
 // app.get('/ab?c', (req, res) => {
 //   res.send('Route matched: /ab?c');
 // });
 
-// // *
+// *
 // app.get('/a*cd', (req, res) => {
 //   res.send('Route matched: /a*cd');
 // });
 
-// // /
+// /
 // app.get(/a/, (req, res) => {
 //   res.send('Route matched any path containing "a"');
 // });
@@ -204,7 +204,7 @@
 //   res.send('You will not see this response because the handler is skipped');
 // });
 
-// // Next matching route handler
+// Next matching route handler
 // app.get('/skip', (req, res) => {
 //   res.send('Skipped to this route handler');
 // });
@@ -421,10 +421,24 @@ app.delete("/user", async (req, res) => {
 
 // Updating Data with PATCH API
 // patch user API - updating the data of user
-app.patch("/user", async (req, res) => {
-    const userId = req.body.userId;
+app.patch("/user/:userId", async (req, res) => {
+    const userId = req.params?.userId;
     const data = req.body;
-    try {
+
+// {
+//     "gender":"male",
+//     "skills":["acting","drama","javascript"]
+// }
+try{
+    const ALLOWED_UPDATES=[
+      "url","about","gender","email","password","skills","age"
+    ];
+    const isUpdateAllowed=Object.keys(data).every((key)=>
+       ALLOWED_UPDATES.includes(key)
+    );
+    if(!isUpdateAllowed){
+    throw new Error("updates are not allowed");
+}
         const user = await User.findByIdAndUpdate(userId,  data,{ returnDocument: "before" });
         console.log("Returned user:", user);
         if (!user) {
@@ -446,8 +460,8 @@ connectDB()
       console.log("Server is running on port 7777")
     })
   })
-  .catch(() => {
-    console.error("DB cannot be connected")
+  .catch((err) => {
+    console.error("DB cannot be connected",err)
   })
 
 
