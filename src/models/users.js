@@ -1,34 +1,83 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
     firstName: {
       type: String,
-      required:true, //as we have written required below the firstNmae so we have to pass firstName in postman to push the data in MongoDB. 
+      required: [true, "First name is required"],
+      trim: true,
+      minLength: [3, "First name must be at least 3 characters"],
+      maxLength: [50, "First name cannot exceed 50 characters"]
     },
+
     lastName: {
       type: String,
+      trim: true,
+      maxLength: [50, "Last name cannot exceed 50 characters"]
     },
+
     email: {
       type: String,
-      required:true,
-      unique:true,//the email id mmust be the uniquefrom the database,without uniqueness it will not pass.
+      required: [true, "Email is required"],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, "Please enter a valid email"]
     },
+
     password: {
       type: String,
+      required: [true, "Password is required"],
+      minLength: [6, "Password must be at least 6 characters"]
     },
+
     age: {
       type: Number,
-      min: 18
+      min: [18, "Age must be at least 18"],
+      max: [100, "Age cannot be more than 100"]
     },
+
     gender: {
       type: String,
-      enum: ['male', 'female', 'other']
+      lowercase: true,
+      trim: true,
+      enum: {
+        values: ["male", "female", "other"],
+        message: "Gender must be male, female or other"
+      }
     },
-    
+
+    about: {
+      type: String,
+      default: "Dev is in search for someone here"
+    },
+
+    photoURL: {
+      type: String,
+      trim: true
+    },
+
+    skills: {
+      type: [String]
+    },
+
+    role: {
+      type: String,
+      default: "user",
+      enum: ["user", "admin"]
+    },
+
+    isActive: {
+      type: Boolean,
+      default: true
+    }
   },
-)
+  {
+    timestamps: true
+  }
+);
 
-const userModel = mongoose.model("User", userSchema)
+const User = mongoose.model("User", userSchema);
 
-module.exports=userModel;
+module.exports = User;
+
