@@ -32,7 +32,12 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       required: [true, "Password is required"],
-      minLength: [6, "Password must be at least 6 characters"]
+      minLength: [6, "Password must be at least 6 characters"],
+         validate(value) {
+            if (!validator.isStrongPassword(value)) {
+                throw new Error("Enter a strong password :" + value)
+            }
+        }
     },
 
     age: {
