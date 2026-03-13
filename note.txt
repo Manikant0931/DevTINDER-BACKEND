@@ -65,3 +65,12 @@ EPISODE 8 NOTES:
 -surf the NPM library(i.e.,NPM validators) for the more details.
 -Install the validator library and add some validation in the user schema using the validator library.
 -Explore the validator library for more validation functions and add them to the user schema.
+-NEVER trust req.body
+
+EPISODE 9 NOTES:
+-Validate data in SIGNUP API.
+-install bcrypt library for hashing the password.
+-crate PasswordHash using bycrypt and save the user as encrypted password in the database.
+-create login API.
+-Compare the passsword and throw errors if the email is not found or password is incorrect.
+-Explore the bcrypt library for more functions.

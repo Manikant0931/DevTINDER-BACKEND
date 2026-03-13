@@ -13,6 +13,7 @@
 // app.use("/goodbye", (req, res) => {
 //     res.send("Goodbye from /goodbye route");
 // });
+
 // // ✅ root route LAST
 // app.use("/", (req, res) => {
 //     res.send("Hello from the root route");
@@ -242,7 +243,7 @@
 
 
 ///app.use() vs app.all()
-// 
+//
 // 
 // 
 // 
@@ -287,181 +288,158 @@
 //         console.error("db cannot be connected")
 //     });
 
-// ---------creating database schema
+//--------------------AFTER EPISODE 6 (DATABASE, SCHEMA & MODELS | MONGOOSE)
 
-const express = require("express")
-const connectDB = require("./src/config/database")
-const User = require("./src/models/users")
-const app = express()
+//Core dependencies
+const express=require("express")
+const connectDB=require("./src/config/database")
+const User=require("./src/models/users")
+const {validateSignupData}=require("./src/utils/validations")
+const bcrypt=require("bcrypt")
+
+const app=express()
+
+//Middleware: parses JSON request body -> req.body
 app.use(express.json())
 
-//METHOD-1.manually adding here the data to database
-// app.post("/signup", async (req, res)=>{
-//   // creating an instance of the user model.
-//     const user = new User({
-//       firstName: "Manikant",
-//       lastName: "Mishra",
-//       email: "viratkoli@gmail.com",
-//       password: "secret123",
-//       age: 21,
-//       gender: "male",
-//     });
-//     try{
-//     await user.save();
-//     res.send("user added successfully.");
-// }
-// catch(err){
-//   res.status(400).send("error saving the user:"+ err.message);
-// }
-// });
+//-------------------------------- SIGNUP API --------------------------------
+//Concept:
+//1. Validate request data
+//2. Hash password using bcrypt
+//3. Save user in MongoDB
+//4. Never store plain passwords
 
-// connectDB()
-//   .then(() => {
-//     console.log("database successfully connected")
-//     app.listen(7777, () => {
-//       console.log("Server is running on port 7777")
-//     })
-//   })
-//   .catch(() => {
-//     console.error("db cannot be connected")
-//   })
-
-// 2-METHOD:directly editing it through the postman api..
-
-// app.post("/signup", async (req, res)=>{
-//     const user = new User(req.body);
-//     try{
-//     await user.save();
-//     res.send("user added successfully.");
-// }
-// catch(err){
-//   res.status(400).send("error saving the user:"+ err.message);
-// }
-// });
-
-// connectDB()
-//   .then(() => {
-//     console.log("database successfully connected")
-//     app.listen(7777, () => {
-//       console.log("Server is running on port 7777")
-//     })
-//   })
-//   .catch(() => {
-//     console.error("db cannot be connected")
-//   })
-
-
-// 3.USER BY EMAIL ADDRESS AND AND GET ALL USERS.
-
-// SIGNUP API
-app.post("/signup", async (req, res) => {
-  try {
-    const user = new User(req.body)
+app.post("/signup",async(req,res)=>{
+  try{
+    const {firstName,lastName,email,password}=req.body
+    if(!firstName||!lastName||!email||!password){
+      return res.status(400).send("All fields are required")
+    }
+    const passwordHash=await bcrypt.hash(password,10)
+    const user=new User({
+      firstName,
+      lastName,
+      email,
+      password:passwordHash
+    })
+    console.log(passwordHash);
     await user.save()
-    res.status(201).send("User added successfully")
-  } catch (err) {
-    res.status(400).send("Error saving the user: " + err.message)
+    res.send("User added successfully")
+  }catch(err){
+    res.status(400).send("Error saving the user: "+err.message)
   }
 })
 
-// (i) get users by same emailId
-// Get user by email
-app.get("/feed", async (req, res) => {
-  try {
-    const { email } = req.query
-    if (!email) {
+//-------------------------------- LOGIN API --------------------------------
+//Concept:
+//1. Find user using email
+//2. Compare plaintext password with hashed password
+//3. bcrypt.compare() returns true/false
+
+app.post("/login",async(req,res)=>{
+  try{
+    const {email,password}=req.body
+    const user=await User.findOne({email})
+    if(!user){
+      throw new Error("Invalid Credentials")
+    }
+    const isPasswordValid=await bcrypt.compare(password,user.password)
+    if(isPasswordValid){
+      res.send("Login successful")
+    }else{
+      throw new Error("Invalid Credentials")
+    }
+  }catch(err){
+    res.status(400).send("ERROR "+err.message)
+  }
+})
+
+//-------------------------------- GET USERS BY EMAIL --------------------------------
+//Concept:
+//Query parameters -> req.query
+//Example:
+//GET /feed?email=test@gmail.com
+
+app.get("/feed",async(req,res)=>{
+  try{
+    const {email}=req.query
+    if(!email){
       return res.status(400).send("email query parameter is required")
     }
-    const users = await User.find({ email })
+    const users=await User.find({email})
     res.send(users)
-  } catch (err) {
+  }catch(err){
     res.status(500).send("Something went wrong")
   }
 })
 
-// (i.a)Handling Duplicate Documents with findOne()
-    //user API to find the single user by by email
-// app.get("/user", async (req, res) => {
-//   const userEmail = req.query.emailId
-//   try {
-//     const user = await User.findOne({ emailId: userEmail })
-//     if (!user) {
-//       return res.status(404).send("User not found")
-//     }
-//     res.send(user)
-//   } catch (err) {
-//     res.status(500).send("Something went wrong")
-//   }
-// })
-// (ii) get all users / FEED
-app.get("/feed", async (req, res) => {
-  try {
-    const users = await User.find({})
-    res.send(users)
-  } catch (err) {
-    res.status(500).send("Something went wrong")
+//-------------------------------- DELETE USER --------------------------------
+//Concept:
+//Delete document using MongoDB ObjectId
+
+app.delete("/user",async(req,res)=>{
+  const userId=req.body.userId
+  try{
+    await User.findByIdAndDelete({_id:userId})
+    res.send("User deleted Successfully")
+  }catch(err){
+    res.status(400).send("Something went wrong")
   }
 })
 
-// Delete API - Removing Documents from Database
-    //delete user API - deleting a user by its id
-app.delete("/user", async (req, res) => {
-    const userId = req.body.userId;
+//-------------------------------- UPDATE USER --------------------------------
+//Concept:
+//PATCH updates partial data
+//Allow only specific fields to update
 
-    try {
-        const user=await User.findByIdAndDelete({_id: userId});
-        // const users = await User.findByIdAndDelete(userId);
-        // both are theway to delete to userAPI
-        res.send("User deleted Successfully")
-
-    } catch (err) {
-        res.status(400).send("Something went wrong")
-    }
-})
-
-// Updating Data with PATCH API
-// patch user API - updating the data of user
-app.patch("/user/:userId", async (req, res) => {
-    const userId = req.params?.userId;
-    const data = req.body;
-
-// {
-//     "gender":"male",
-//     "skills":["acting","drama","javascript"]
-// }
-try{
-    const ALLOWED_UPDATES=[
-      "url","about","gender","email","password","skills","age"
-    ];
-    const isUpdateAllowed=Object.keys(data).every((key)=>
-       ALLOWED_UPDATES.includes(key)
-    );
+app.patch("/user/:userId",async(req,res)=>{
+  const userId=req.params.userId
+  const data=req.body
+  try{
+    const ALLOWED_UPDATES=["url","about","gender","email","password","skills","age"]
+    const isUpdateAllowed=Object.keys(data).every((key)=>ALLOWED_UPDATES.includes(key))
     if(!isUpdateAllowed){
-    throw new Error("updates are not allowed");
-}
-        const user = await User.findByIdAndUpdate(userId,  data,{ returnDocument: "before" });
-        console.log("Returned user:", user);
-        if (!user) {
-            return res.status(404).send("User not found");
-        }
-        res.send("User updated successfully");
-    } catch (err) {
-        res.status(400).send("Something went wrong");
+      throw new Error("Updates are not allowed")
     }
-});
+    const user=await User.findByIdAndUpdate(userId,data,{returnDocument:"before"})
+    if(!user){
+      return res.status(404).send("User not found")
+    }
+    res.send("User updated successfully")
+  }catch(err){
+    res.status(400).send("Something went wrong")
+  }
+})
 
+//-------------------------------- GET USER BY EMAIL --------------------------------
+//Concept:
+//Find a single document using findOne()
 
+app.get("/user",async(req,res)=>{
+  const userEmail=req.body.emailId
+  try{
+    const user=await User.findOne({emailId:userEmail})
+    if(!user){
+      return res.status(404).send("User not found")
+    }
+    res.send(user)
+  }catch(err){
+    res.status(500).send("Something went wrong")
+  }
+})
 
-//CONNECTING TO DATABASE
+//-------------------------------- DATABASE CONNECTION --------------------------------
+//Concept:
+//1. Connect MongoDB using mongoose
+//2. Start server only after DB connection succeeds
+
 connectDB()
-  .then(() => {
-    console.log("Database successfully connected")
-    app.listen(7777, () => {
-      console.log("Server is running on port 7777")
-    })
+.then(()=>{
+  console.log("Database successfully connected")
+  app.listen(7555,()=>{
+    console.log("Server is running on port 7555 at http://localhost:7555")
   })
-  .catch((err) => {
-    console.error("DB cannot be connected",err)
-  })
-
-
+})
+.catch((err)=>{
+  console.error("DB cannot be connected",err)
+})
