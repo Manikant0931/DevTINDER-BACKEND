@@ -4,10 +4,7 @@ const User = require("../models/user");
 const validator = require("validator");
 const bcrypt = require("bcryptjs");
 const { validateSignupData } = require("../utils/validation");
-
-
 //  STEP 1: BASIC SIGNUP (initial version)
-
 // authRouter.post("/signup", async (req, res) => {
 //   try {
 //     const { firstName, lastName, emailId, password } = req.body;
@@ -102,10 +99,13 @@ authRouter.post("/signup", async (req, res) => {
     const token = await savedUser.getjwt();
 
     // Step 7: Store token in cookie
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 8 * 3600000), // 8 hours
-      httpOnly: true, // prevents XSS attacks
-    });
+   res.cookie("token", token, {
+  expires: new Date(Date.now() + 8 * 3600000),
+  httpOnly: true,
+  sameSite: "lax",
+  maxAge: 24 * 60 * 60 * 1000,
+  secure: false
+});
 
     // Step 8: Send response
     res.status(200).json({
@@ -141,43 +141,34 @@ authRouter.post("/signup", async (req, res) => {
 authRouter.post("/login", async (req, res) => {
   try {
     const { emailId, password } = req.body;
-
     //  Validate email format
     if (!validator.isEmail(emailId)) {
       throw new Error("Invalid Email");
     }
-
     //  Check if user exists
     const user = await User.findOne({ emailId });
     if (!user) {
       throw new Error("Invalid Credentials");
     }
-
     //  Compare hashed password
     const isValidPassword = await user.validatePassword(password);
-
     if (isValidPassword) {
       //  Generate token
       const token = await user.getjwt();
-
-      //  Set cookie
       res.cookie("token", token, {
-        expires: new Date(Date.now() + 8 * 3600000),
-        httpOnly: true,
-      });
-
+      expires: new Date(Date.now() + 8 * 3600000),
+      httpOnly: true,
+      sameSite: "lax",
+      secure: false
+});
       res.status(200).json({ user });
-
     } else {
       throw new Error("Invalid Credentials"); // fixed typo
     }
-
   } catch (err) {
     res.status(400).send("ERROR: " + err.message);
   }
 });
-
-
 //  LOGOUT (FINAL)
 authRouter.post("/logout", async (req, res) => {
   res
@@ -186,5 +177,4 @@ authRouter.post("/logout", async (req, res) => {
     })
     .send("User Logged out successfully");
 });
-
 module.exports = authRouter;

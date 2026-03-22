@@ -47,6 +47,7 @@ pids
 .yarn-integrity
 
 #trial
+working.txt
 app1.js
 package-lock.json
 package.json

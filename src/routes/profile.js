@@ -74,26 +74,25 @@ profileRouter.post("/profile/edit", userAuth, async (req, res) => {
     if (!validateEditFields(req)) {
       throw new Error("Invalid Edit request");
     }
-
     const loggedInUser = req.user;
-
     // Step 2: Update only provided fields dynamically
     Object.keys(req.body).forEach((key) => {
       loggedInUser[key] = req.body[key];
     });
-
     // Step 3: Save updated user
     await loggedInUser.save();
-
     // Step 4: Send structured response
     res.json({
       message: `${loggedInUser.firstName}, your profile updated successfully`,
       data: loggedInUser,
     });
-
   } catch (err) {
     res.status(400).send("ERROR : " + err.message);
   }
 });
+
+
+
+
 
 module.exports = profileRouter;

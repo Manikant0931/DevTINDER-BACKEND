@@ -21,3 +21,6 @@ Password hashing (bcrypt)
 DB save
 JWT generation
 Cookie set
+
+
+

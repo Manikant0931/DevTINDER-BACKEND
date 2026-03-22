@@ -453,25 +453,28 @@
 
 
 //THE LAST DANCE:
+require("dotenv").config();
+
 const express = require("express");
 const connectDB = require("./src/config/database");
 const cookieParser = require("cookie-parser");
-const app = express();
-const dotenv = require("dotenv");
-dotenv.config({});
 const cors = require("cors");
 
+const app = express();
+
+// CORS
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5273",
     credentials: true,
   })
 );
 
+// Middlewares
 app.use(express.json());
 app.use(cookieParser());
 
-//routes
+// Routes
 const authRouter = require("./src/routes/auth");
 const profileRouter = require("./src/routes/profile");
 const requestRouter = require("./src/routes/request");
@@ -482,13 +485,9 @@ app.use("/", profileRouter);
 app.use("/", requestRouter);
 app.use("/", userRouter);
 
-//database connect before server
+// DB + Server
 connectDB().then(() => {
-  try {
-    app.listen(process.env.PORT, () => {
-      console.log(`Server running on ` + process.env.PORT);
-    });
-  } catch (error) {
-    console.log(error);
-  }
+  app.listen(process.env.PORT, () => {
+    console.log(`Server running on ${process.env.PORT}`);
+  });
 });

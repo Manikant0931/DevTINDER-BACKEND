@@ -220,7 +220,6 @@ requestRouter.post(
       // Step 3: Update status
       connectionRequest.status = status;
       const data = await connectionRequest.save();
-
       // Step 4: Response
       res.status(200).json({
         message: "Connection request " + status,
