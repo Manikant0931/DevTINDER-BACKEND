@@ -74,3 +74,7 @@ EPISODE 9 NOTES:
 -create login API.
 -Compare the passsword and throw errors if the email is not found or password is incorrect.
 -Explore the bcrypt library for more functions.
+
+-
+
+EPISODE 10 NOTES:

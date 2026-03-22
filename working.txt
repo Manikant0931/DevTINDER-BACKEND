@@ -1,0 +1,23 @@
+Correct Flow(My Project is a dating app, so the flow is as follows):
+Signup=>Login=>Profile=>Send Request=>Review Request=>Connections=>Feed
+
+STEP 1: SIGNUP
+POST
+http://localhost:5000/signup
+Body (JSON)
+{
+  "firstName": "Mani",
+  "lastName": "Mishra",
+  "emailId": "mani@test.com",
+  "password": "Strong@123",
+  "age": 22,
+  "gender": "male",
+  "about": "Developer",
+  "skills": ["Node", "React"]
+}
+Concept:
+Validation (validator)
+Password hashing (bcrypt)
+DB save
+JWT generation
+Cookie set

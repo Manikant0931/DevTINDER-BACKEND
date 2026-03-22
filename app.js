@@ -291,16 +291,16 @@
 //--------------------AFTER EPISODE 6 (DATABASE, SCHEMA & MODELS | MONGOOSE)
 
 //Core dependencies
-const express=require("express")
-const connectDB=require("./src/config/database")
-const User=require("./src/models/users")
-const {validateSignupData}=require("./src/utils/validations")
-const bcrypt=require("bcrypt")
-
-const app=express()
-
+// const express=require("express")
+// const connectDB=require("./src/config/database")
+// const User=require("./src/models/users")
+// const {validateSignupData}=require("./src/utils/validations")
+// const bcrypt=require("bcrypt")
+// const app=express()
 //Middleware: parses JSON request body -> req.body
-app.use(express.json())
+// app.use(express.json())
+// const cookieParser=require("cookie-parser")
+// app.use(cookieParser())
 
 //-------------------------------- SIGNUP API --------------------------------
 //Concept:
@@ -309,137 +309,186 @@ app.use(express.json())
 //3. Save user in MongoDB
 //4. Never store plain passwords
 
-app.post("/signup",async(req,res)=>{
-  try{
-    const {firstName,lastName,email,password}=req.body
-    if(!firstName||!lastName||!email||!password){
-      return res.status(400).send("All fields are required")
-    }
-    const passwordHash=await bcrypt.hash(password,10)
-    const user=new User({
-      firstName,
-      lastName,
-      email,
-      password:passwordHash
-    })
-    console.log(passwordHash);
-    await user.save()
-    res.send("User added successfully")
-  }catch(err){
-    res.status(400).send("Error saving the user: "+err.message)
-  }
-})
+// app.post("/signup",async(req,res)=>{
+//   try{
+//     const {firstName,lastName,email,password}=req.body
+//     if(!firstName||!lastName||!email||!password){
+//       return res.status(400).send("All fields are required")
+//     }
+//     const passwordHash=await bcrypt.hash(password,10)
+//     const user=new User({
+//       firstName,
+//       lastName,
+//       email,
+//       password:passwordHash
+//     })
+//     console.log(passwordHash);
+//     await user.save()
+//     res.send("User added successfully")
+//   }catch(err){
+//     res.status(400).send("Error saving the user: "+err.message)
+//   }
+// })
 
 //-------------------------------- LOGIN API --------------------------------
 //Concept:
 //1. Find user using email
 //2. Compare plaintext password with hashed password
 //3. bcrypt.compare() returns true/false
-
-app.post("/login",async(req,res)=>{
-  try{
-    const {email,password}=req.body
-    const user=await User.findOne({email})
-    if(!user){
-      throw new Error("Invalid Credentials")
-    }
-    const isPasswordValid=await bcrypt.compare(password,user.password)
-    if(isPasswordValid){
-      res.send("Login successful")
-    }else{
-      throw new Error("Invalid Credentials")
-    }
-  }catch(err){
-    res.status(400).send("ERROR "+err.message)
-  }
-})
+// const jwt = require("jsonwebtoken");
+// app.post("/login", async (req,res)=>{
+//   try{
+//     const {email,password}=req.body
+//     const user=await User.findOne({email})
+//     if(!user){
+//       throw new Error("Invalid Credentials")
+//     }
+//     const isPasswordValid=await bcrypt.compare(password,user.password)
+//     if(!isPasswordValid){
+//       throw new Error("Invalid Credentials")
+//     }
+//     const token=jwt.sign({_id:user._id},"SECRET_KEY")
+//     res.cookie("token",token)
+//     res.send("Login Successful")
+//   }catch(err){
+//     res.status(400).send("ERROR "+err.message)
+//   }
+// })
 
 //-------------------------------- GET USERS BY EMAIL --------------------------------
 //Concept:
 //Query parameters -> req.query
 //Example:
 //GET /feed?email=test@gmail.com
+//feed is protected. Only logged in users can access it.
+// const userAuth = require("./src/middlewares/auth")
 
-app.get("/feed",async(req,res)=>{
-  try{
-    const {email}=req.query
-    if(!email){
-      return res.status(400).send("email query parameter is required")
-    }
-    const users=await User.find({email})
-    res.send(users)
-  }catch(err){
-    res.status(500).send("Something went wrong")
-  }
-})
+// app.get("/feed", userAuth , async(req,res)=>{
+//   try{
 
+//     const {email} = req.query
+
+//     if(!email){
+//       return res.status(400).send("email query parameter is required")
+//     }
+
+//     const users = await User.find({email})
+
+//     res.send(users)
+
+//   }catch(err){
+//     res.status(500).send("Something went wrong")
+//   }
+// })
 //-------------------------------- DELETE USER --------------------------------
 //Concept:
 //Delete document using MongoDB ObjectId
 
-app.delete("/user",async(req,res)=>{
-  const userId=req.body.userId
-  try{
-    await User.findByIdAndDelete({_id:userId})
-    res.send("User deleted Successfully")
-  }catch(err){
-    res.status(400).send("Something went wrong")
-  }
-})
+// app.delete("/user",async(req,res)=>{
+//   const userId=req.body.userId
+//   try{
+//     await User.findByIdAndDelete({_id:userId})
+//     res.send("User deleted Successfully")
+//   }catch(err){
+//     res.status(400).send("Something went wrong")
+//   }
+// })
 
 //-------------------------------- UPDATE USER --------------------------------
 //Concept:
 //PATCH updates partial data
 //Allow only specific fields to update
 
-app.patch("/user/:userId",async(req,res)=>{
-  const userId=req.params.userId
-  const data=req.body
-  try{
-    const ALLOWED_UPDATES=["url","about","gender","email","password","skills","age"]
-    const isUpdateAllowed=Object.keys(data).every((key)=>ALLOWED_UPDATES.includes(key))
-    if(!isUpdateAllowed){
-      throw new Error("Updates are not allowed")
-    }
-    const user=await User.findByIdAndUpdate(userId,data,{returnDocument:"before"})
-    if(!user){
-      return res.status(404).send("User not found")
-    }
-    res.send("User updated successfully")
-  }catch(err){
-    res.status(400).send("Something went wrong")
-  }
-})
+// app.patch("/user/:userId",async(req,res)=>{
+//   const userId=req.params.userId
+//   const data=req.body
+//   try{
+//     const ALLOWED_UPDATES=["url","about","gender","email","password","skills","age"]
+//     const isUpdateAllowed=Object.keys(data).every((key)=>ALLOWED_UPDATES.includes(key))
+//     if(!isUpdateAllowed){
+//       throw new Error("Updates are not allowed")
+//     }
+//     const user=await User.findByIdAndUpdate(userId,data,{returnDocument:"before"})
+//     if(!user){
+//       return res.status(404).send("User not found")
+//     }
+//     res.send("User updated successfully")
+//   }catch(err){
+//     res.status(400).send("Something went wrong")
+//   }
+// })
 
 //-------------------------------- GET USER BY EMAIL --------------------------------
 //Concept:
 //Find a single document using findOne()
 
-app.get("/user",async(req,res)=>{
-  const userEmail=req.body.emailId
-  try{
-    const user=await User.findOne({emailId:userEmail})
-    if(!user){
-      return res.status(404).send("User not found")
-    }
-    res.send(user)
-  }catch(err){
-    res.status(500).send("Something went wrong")
-  }
-})
+// app.get("/user",async(req,res)=>{
+//   const userEmail=req.body.emailId
+//   try{
+//     const user=await User.findOne({emailId:userEmail})
+//     if(!user){
+//       return res.status(404).send("User not found")
+//     }
+//     res.send(user)
+//   }catch(err){
+//     res.status(500).send("Something went wrong")
+//   }
+// })
+
+//ADDING PROFILE ROUTE
+// app.get("/profile", userAuth , async (req,res)=>{
+//   try{
+//   const user = req.user
+//     res.send(user)
+//   }catch(err){
+//     res.status(500).send("Something went wrong")
+//   }
+// })
+
 
 //-------------------------------- DATABASE CONNECTION --------------------------------
 //Concept:
 //1. Connect MongoDB using mongoose
 //2. Start server only after DB connection succeeds
 
-connectDB()
-.then(()=>{
-  console.log("Database successfully connected")
-  app.listen(7555,()=>{
-    console.log("Server is running on port 7555 at http://localhost:7555")
+
+//THE LAST DANCE:
+const express = require("express");
+const connectDB = require("./src/config/database");
+const cookieParser = require("cookie-parser");
+const app = express();
+const dotenv = require("dotenv");
+dotenv.config({});
+const cors = require("cors");
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
   })
-})
-.catch((err)=>{
-  console.error("DB cannot be connected",err)
-})
+);
+
+app.use(express.json());
+app.use(cookieParser());
+
+//routes
+const authRouter = require("./src/routes/auth");
+const profileRouter = require("./src/routes/profile");
+const requestRouter = require("./src/routes/request");
+const userRouter = require("./src/routes/user");
+
+app.use("/", authRouter);
+app.use("/", profileRouter);
+app.use("/", requestRouter);
+app.use("/", userRouter);
+
+//database connect before server
+connectDB().then(() => {
+  try {
+    app.listen(process.env.PORT, () => {
+      console.log(`Server running on ` + process.env.PORT);
+    });
+  } catch (error) {
+    console.log(error);
+  }
+});

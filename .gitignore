@@ -1,1 +1,52 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Node Modules
 node_modules/
+
+# Build / Output
+dist
+build
+coverage
+.nyc_output
+
+# Cache
+.cache
+.parcel-cache
+.eslintcache
+.stylelintcache
+.rpt2_cache/
+.npm
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+
+# Runtime files
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Misc
+*.tgz
+.yarn-integrity
+
+#trial
+app1.js
+package-lock.json
+package.json
