@@ -120,23 +120,20 @@ I learned and maintained all my Node.js knowledge in one place:
 
 ### **1️⃣ Clone the Repository**
 ```bash
-git clone https://github.com/akshadjaiswal/devTinder-backend.git
-cd devTinder-backend
-```
-
+git clone https://github.com/.....
 ### **2️⃣ Set Up Environment Variables**
 Create a `.env` file and add:
 ```ini
 DATABASE_URL=mongodb+srv://<username>:<password>@cluster0.mongodb.net/devTinder
 JWT_SECRET=your_jwt_secret
-PORT=3000
+PORT=8000
 ```
 
 ### **3️⃣ Start the Backend Server**
 ```bash
 npm start
 ```
-Server runs at: `http://localhost:3000/`
+Server runs at: `http://localhost:8000/`
 
 ---
 
