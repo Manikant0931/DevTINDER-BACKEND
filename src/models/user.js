@@ -77,9 +77,13 @@ const userSchema = new mongoose.Schema(
 //compound index
 userSchema.index({ firstName: 1, lastName: 1 });
 
+// Generate JWT for the user.
+// Use the JWT secret from environment to ensure signing/verification match.
+// Keep a fallback only for local dev, but prefer setting `JWT_SECRET` in `.env`.
 userSchema.methods.getjwt = async function () {
   const user = this;
-  const token = await jwt.sign({ _id: this._id }, "999@manikant", {
+  const jwtSecret = process.env.JWT_SECRET || "manim@123"; // fallback for local dev
+  const token = await jwt.sign({ _id: this._id }, jwtSecret, {
     expiresIn: "1d",
   });
 
@@ -101,5 +105,6 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
   return isValidPassword;
 };
 
-mongoose.model("User", userSchema);
-module.exports = mongoose.model("User", userSchema);
+// Avoid re-registering the model if it already exists (prevents OverwriteModelError).
+const User = mongoose.models.User || mongoose.model("User", userSchema);
+module.exports = User;

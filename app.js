@@ -1,3 +1,6 @@
+// Load environment variables early so `process.env.JWT_SECRET` is available
+require("dotenv").config();
+
 // const express=require("express");
 // const app=express()
 
@@ -488,6 +491,6 @@ app.use("/", userRouter);
 // DB + Server
 connectDB().then(() => {
   app.listen(process.env.PORT, () => {
-    console.log(`Server running on ${process.env.PORT}`);
+    console.log(`Server running on ${process.env.PORT},at http://localhost:${process.env.PORT}`);
   });
 });
